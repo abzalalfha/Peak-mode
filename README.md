@@ -22,3 +22,13 @@ This static GitHub Pages app can show reminders while open and running. It canno
 
 ## Nutrition and training
 2,500 kcal and 180 g protein are initial estimates, not exact laboratory calculations. Food values vary with recipes, fish species, edible portions, coconut and oil. Adjust after 2–3 weeks using average weight, waist, recovery and performance. Start lifting conservatively after your training break; this is a general plan, not medical advice.
+
+## v2 upgrades
+- **Physique tab:** daily Front/Side/Back photo, start-vs-latest comparison, timeline, delete. Photos are compressed and stored in IndexedDB on the device.
+- **Meal log:** tick meals as eaten, live calories and protein vs target, add extra meals, attach a photo to any meal.
+- **Easy meals:** every dish has a "How to make it" button with total minutes and shortcuts, plus a 90-minute Sunday prep checklist.
+- **Workout:** exercise ticks (all done auto-ticks the checklist), rest timer, personal-best toast.
+- **Progress:** weight trend chart, backups now include photos, reminder when no backup in 7 days.
+- **Fixes:** page markup typo, day rollover now uses local time (before 5:30 am IST it used yesterday's date), water interval setting now works, editable calorie/protein targets, offline cache updates itself.
+
+After uploading v2 to GitHub, close and reopen the app once or twice so the new version loads.
