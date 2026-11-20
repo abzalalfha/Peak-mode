@@ -32,3 +32,7 @@ This static GitHub Pages app can show reminders while open and running. It canno
 - **Fixes:** page markup typo, day rollover now uses local time (before 5:30 am IST it used yesterday's date), water interval setting now works, editable calorie/protein targets, offline cache updates itself.
 
 After uploading v2 to GitHub, close and reopen the app once or twice so the new version loads.
+
+## v3: themes and music
+- **Themes:** Ember (default), Ocean, Violet, Light. Change under the ⚙ settings button → Theme.
+- **Workout music:** Workout tab → paste a Spotify or YouTube playlist link to play it inside the app, or add your own songs (MP3/M4A) to play offline with lock-screen controls. Songs stay on the device and are not included in backups.
