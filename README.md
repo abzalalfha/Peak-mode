@@ -61,3 +61,13 @@ After uploading v2 to GitHub, close and reopen the app once or twice so the new 
 - Redesigned look: bento cards, week strip, calorie ring, weekly consistency bars, floating bottom dock (Home, Train, Nutrition, Coach, More).
 - New default theme **Volt** (dark with lime and lavender); **Sunset** (light, orange) is available in Settings → Theme, along with Ember, Ocean, Violet and Light. Add your name in Settings for the greeting.
 - All existing features and data are unchanged.
+
+## v9: first-run setup
+- On first open the app asks about you, goals, training, food and any limitations, then builds your plan and targets. No account yet: everything is saved on the device.
+- Change any answer later: More → Profile & preferences (or ⚙ Settings → Edit profile & preferences).
+- Diet and region choices filter the food search. Meal-plan menus and exercise selection do not adapt to diet or injuries yet.
+
+## v10: Run tab
+- GPS tracking for run, walk and cycle: time, distance, current and average pace, km splits, route drawing, calorie estimate, history, weekly distance.
+- Share image with route, distance, time and pace. The first and last 200 m can be hidden to protect your home location.
+- Web limits: keep the screen on (iPhone cannot track in the background), plain route drawing (no street map). Activities are saved on this device and included in backups.
