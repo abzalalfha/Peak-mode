@@ -46,3 +46,9 @@ After uploading v2 to GitHub, close and reopen the app once or twice so the new 
 ## v5: training setup
 - First launch asks where you train (gym, home, outdoors), equipment, workout types (strength, HIIT, running, mobility), days per week, session length and experience, then builds your week. Change it any time on the Workout tab.
 - Gym with strength keeps the original weekly program. Home and outdoor plans are generated from your equipment, with rest days and cardio slots.
+
+## v6: exercise library
+- **Library tab:** search plus muscle, equipment and level filters over the Free Exercise DB (870+ exercises, public domain/Unlicense). The data and images load from GitHub at runtime and are cached for offline use after first view. Nothing is copied into this repo.
+- **Demos in workouts:** every exercise in Today and Workout has a ▶ Demo button. Names are matched strictly; if there is no exact match, no demo is shown.
+- Each demo alternates start/end positions with play, pause, replay and full screen, plus steps, muscles, equipment, previous performance, set logging, and alternatives (easier, harder, and with your equipment).
+- This dataset has images, not video or GIFs. For video you would need a licensed API such as ExerciseDB (API key) or a paid pack.
