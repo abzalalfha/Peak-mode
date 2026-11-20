@@ -42,3 +42,7 @@ After uploading v2 to GitHub, close and reopen the app once or twice so the new 
 - **Morning check-in:** readiness score from your own answers plus training streak, with a visible factor breakdown and a recommendation. Pain or illness overrides the score.
 - **Weekly report:** intake, workouts, readiness and weight trend (regression over 21 days), with rule-based suggestions. Calorie changes are only applied when you confirm.
 - Not included yet: cloud sync, Apple Health (needs a native iOS wrapper), AI chat coach (needs a server and API key), food database, exercise library.
+
+## v5: training setup
+- First launch asks where you train (gym, home, outdoors), equipment, workout types (strength, HIIT, running, mobility), days per week, session length and experience, then builds your week. Change it any time on the Workout tab.
+- Gym with strength keeps the original weekly program. Home and outdoor plans are generated from your equipment, with rest days and cardio slots.
