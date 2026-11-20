@@ -52,3 +52,12 @@ After uploading v2 to GitHub, close and reopen the app once or twice so the new 
 - **Demos in workouts:** every exercise in Today and Workout has a ▶ Demo button. Names are matched strictly; if there is no exact match, no demo is shown.
 - Each demo alternates start/end positions with play, pause, replay and full screen, plus steps, muscles, equipment, previous performance, set logging, and alternatives (easier, harder, and with your equipment).
 - This dataset has images, not video or GIFs. For video you would need a licensed API such as ExerciseDB (API key) or a paid pack.
+
+## v7: Indian food database
+- Today → **+ Search food**: about 70 foods from across India (South, North, West, East, North-East, pan-India) with household portions (katori, roti, idli, glass, handful) or grams. Adds calories, protein, carbs and fat to today's intake.
+- Values are approximate typical home-style figures, not an official dataset. Use **custom food** for exact numbers from a label or your own recipe.
+
+## v8: new interface
+- Redesigned look: bento cards, week strip, calorie ring, weekly consistency bars, floating bottom dock (Home, Train, Nutrition, Coach, More).
+- New default theme **Volt** (dark with lime and lavender); **Sunset** (light, orange) is available in Settings → Theme, along with Ember, Ocean, Violet and Light. Add your name in Settings for the greeting.
+- All existing features and data are unchanged.
