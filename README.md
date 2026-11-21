@@ -79,3 +79,7 @@ After uploading v2 to GitHub, close and reopen the app once or twice so the new 
 - **Tabs:** Today, Train (Plan, Library, Run), Eat, You (Progress, Photos, Coach). Settings stay under the gear button.
 - **Music:** floating button on every screen, opens the music sheet.
 - Not included: accounts, cloud sync, background push reminders, AI chat coach. These need a backend.
+
+## v12
+- Run is a main tab again (Today, Train, Run, Eat, You), always visible.
+- Run PNG: your route, PEAK MODE logo, distance, time and pace. Choose dark, light or transparent background. Download PNG or Share.
