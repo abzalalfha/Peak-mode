@@ -71,3 +71,15 @@ After uploading v2 to GitHub, close and reopen the app once or twice so the new 
 - GPS tracking for run, walk and cycle: time, distance, current and average pace, km splits, route drawing, calorie estimate, history, weekly distance.
 - Share image with route, distance, time and pace. The first and last 200 m can be hidden to protect your home location.
 - Web limits: keep the screen on (iPhone cannot track in the background), plain route drawing (no street map). Activities are saved on this device and included in backups.
+
+
+## v11 focused redesign
+- Simplified primary navigation to Today, Train, Eat and You; secondary tools remain accessible from You.
+- Today focuses on the planned workout, a single start action and next meal.
+- Guided workout flow presents one exercise at a time, tracks completed sets and starts a rest countdown.
+- Nutrition meal list is presented as a time-based timeline.
+- Workout music is removed from the main workout flow and opened from a floating music shortcut.
+- Existing v10 modules and local data storage are retained.
+
+## v11 scope and limitations
+This remains an offline-first browser PWA, not a compiled native app. The guided session uses the existing workout plan and tracks set completion in the active session; it does not yet save a complete structured workout log to history. The exercise visual area is a reference placeholder, not a licensed exercise video. The meal timeline displays the existing meal plan; marking meals eaten and macro-matched meal swaps are not yet implemented. Cloud accounts, cross-device sync, reliable background push and server AI require backend services and are not included in this static build.
