@@ -1,0 +1,51 @@
+/* PEAK MODE: exercise library (Free Exercise DB, public domain / Unlicense), loaded at runtime */
+(()=>{
+const E=s=>document.querySelector(s),BASE='https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/',esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const SYN={db:'dumbbell',dumbbells:'dumbbell',bodyweight:'',squats:'squat',lunges:'lunge',curls:'curl',rows:'row',raises:'raise',presses:'press',dips:'dip',crunches:'crunch',bands:'band',kettlebells:'kettlebell'},STOP=new Set(['the','a','with','each','and','or','total','on','of','to','your','using']);
+const toks=s=>new Set(String(s).toLowerCase().replace(/\(.*?\)/g,' ').replace(/push[\s-]*ups?/g,'pushup').replace(/pull[\s-]*ups?/g,'pullup').replace(/chin[\s-]*ups?/g,'chinup').replace(/sit[\s-]*ups?/g,'situp').replace(/[^a-z0-9 ]/g,' ').split(/\s+/).filter(w=>w&&!STOP.has(w)).map(w=>w in SYN?SYN[w]:w).filter(Boolean));
+let DB=null,pend=null;
+const load=()=>DB?Promise.resolve(DB):pend||(pend=fetch(BASE+'dist/exercises.json').then(r=>{if(!r.ok)throw 0;return r.json()}).then(j=>DB=j.map(x=>({...x,primaryMuscles:x.primaryMuscles||[],secondaryMuscles:x.secondaryMuscles||[],images:x.images||[],_n:x.name.toLowerCase(),_t:toks(x.name)}))).catch(e=>{pend=null;throw e}));
+/* strict matching: every word of the planned exercise must appear in the library name. No match = no demo, never a guess. */
+function match(name){let best=null;for(const alt of String(name).split('/')){const q=toks(alt);if(!q.size)continue;for(const x of DB){let i=0;q.forEach(w=>x._t.has(w)&&i++);if(i<q.size)continue;if(q.size===1&&x._t.size!==1)continue;const s=i*2/(q.size+x._t.size);if(!best||s>best.s||(s===best.s&&x.name.length<best.x.name.length))best={x,s}}}return best&&best.x}
+const img=p=>BASE+'exercises/'+p;
+/* ---------- library page ---------- */
+const MG={Chest:['chest'],Back:['lats','middle back','lower back','traps'],Shoulders:['shoulders'],Biceps:['biceps'],Triceps:['triceps'],Forearms:['forearms'],Quads:['quadriceps'],Hamstrings:['hamstrings'],Glutes:['glutes'],Calves:['calves'],Core:['abdominals'],Cardio:'cardio',Stretching:'stretching'},LV=['beginner','intermediate','expert'];
+const F={q:'',m:'',e:'',l:''};let shown=30;
+const eqName=x=>x.equipment||'other';
+function chips(){const cnt={};DB.forEach(x=>cnt[eqName(x)]=(cnt[eqName(x)]||0)+1);const eqs=Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a]).slice(0,9),mk=(k,a)=>a.map(v=>`<button data-k="${k}" data-v="${esc(v)}" class="${F[k]===v?'on':''}">${esc(v)}</button>`).join('');
+E('#lMuscle').innerHTML=mk('m',Object.keys(MG));E('#lEq').innerHTML=mk('e',eqs);E('#lLvl').innerHTML=mk('l',LV)}
+function list(){const w=F.q.toLowerCase().split(/\s+/).filter(Boolean),r=DB.filter(x=>{if(F.m){const g=MG[F.m];if(typeof g==='string'?x.category!==g:!x.primaryMuscles.some(m=>g.includes(m)))return false}if(F.e&&eqName(x)!==F.e)return false;if(F.l&&x.level!==F.l)return false;return w.every(t=>x._n.includes(t)||x.primaryMuscles.some(m=>m.includes(t)))});
+E('#lStatus').textContent=r.length+' exercises';E('#lList').innerHTML=r.slice(0,shown).map(x=>`<button class="lrow" data-id="${esc(x.id)}">${x.images[0]?`<img src="${esc(img(x.images[0]))}" crossorigin="anonymous" loading="lazy" alt="">`:'<span class="ph"></span>'}<span><b>${esc(x.name)}</b><small>${esc(x.level||'')} · ${esc(eqName(x))} · ${esc(x.primaryMuscles.join(', '))}</small></span></button>`).join('');E('#lMore').hidden=r.length<=shown}
+async function openLib(){const s=E('#lStatus');try{s.textContent='Loading exercise library…';await load();chips();list()}catch{s.innerHTML='Library needs internet the first time, then works offline. <button class="link" id="lRetry">Try again</button>'}}
+document.querySelector('nav [data-page="library"]').addEventListener('click',()=>{if(!DB)openLib()});
+E('#lSearch').oninput=e=>{F.q=e.target.value;shown=30;DB&&list()};E('#lMore').onclick=()=>{shown+=30;list()};
+E('#library').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.id==='lRetry')return openLib();if(b.dataset.k){F[b.dataset.k]=F[b.dataset.k]===b.dataset.v?'':b.dataset.v;shown=30;chips();list()}if(b.dataset.id)openEx(DB.find(x=>x.id===b.dataset.id))});
+/* ---------- exercise dialog ---------- */
+document.body.insertAdjacentHTML('beforeend','<dialog id="exDialog"><div class="row"><h2 id="eName"></h2><button id="eClose" aria-label="Close">✕</button></div><p class="hint" id="eMatch"></p><div id="eMedia"></div><div class="ctl" id="eCtl"><button id="ePlay">Pause</button><button id="eRe">Replay</button><button id="eFs">Full screen</button></div><div id="eInfo"></div></dialog>');
+let cur=null,fr=[],fi=0,tm=0,playing=true;
+const stop=()=>{clearInterval(tm);tm=0},show=()=>{const m=E('#eMedia');m.innerHTML=fr.length?`<img src="${esc(fr[fi])}" crossorigin="anonymous" alt="${esc(cur.ex.name)} demonstration"><span class="fl">${fr.length>1?'Position '+(fi+1)+' of '+fr.length:''}</span>`:'<p class="hint">No demonstration image for this exercise.</p>';const i=m.querySelector('img');if(i)i.onerror=()=>{m.innerHTML='<p class="hint">Demo not available right now. Connect once to load it, then it works offline.</p>'}},
+run=()=>{stop();if(fr.length>1&&playing)tm=setInterval(()=>{fi=(fi+1)%fr.length;show()},1000)};
+const avail=()=>{const p=db.plan;if(!p||p.where==='gym')return()=>true;const ok=new Set(['body only','other',null,undefined,'']);if(p.eq.includes('db'))ok.add('dumbbell');if(p.eq.includes('band'))ok.add('bands');return x=>ok.has(x.equipment)};
+function alts(ex){const ok=avail(),li=LV.indexOf(ex.level),pool=DB.filter(x=>x.id!==ex.id&&x.category==='strength'&&x.primaryMuscles[0]&&x.primaryMuscles[0]===ex.primaryMuscles[0]&&(!ex.force||x.force===ex.force)),srt=a=>a.sort((a,b)=>(eqName(a)===eqName(ex)?0:1)-(eqName(b)===eqName(ex)?0:1)||a.name.localeCompare(b.name)).slice(0,4);
+return[['Alternatives with your equipment',srt(pool.filter(x=>ok(x)&&LV.indexOf(x.level)===li))],['Easier',srt(pool.filter(x=>ok(x)&&LV.indexOf(x.level)<li))],['Harder',srt(pool.filter(x=>ok(x)&&LV.indexOf(x.level)>li))]]}
+const lastOf=n=>db.lifts.filter(l=>l.name.toLowerCase()===n.toLowerCase()).slice(-3).reverse();
+function openEx(ex,plan){if(!ex)return;cur={ex,plan};stop();playing=true;fi=0;fr=ex.images.map(img);E('#ePlay').textContent='Pause';E('#eName').textContent=plan||ex.name;
+E('#eMatch').textContent=plan&&plan!==ex.name?'Showing library exercise: '+ex.name:'';show();run();E('#eCtl').hidden=!fr.length;
+const logName=plan||ex.name,last=lastOf(logName),a=alts(ex).filter(g=>g[1].length);
+E('#eInfo').innerHTML=`<p class="hint"><b>Primary:</b> ${esc(ex.primaryMuscles.join(', ')||'n/a')}<br><b>Secondary:</b> ${esc(ex.secondaryMuscles.join(', ')||'none listed')}<br><b>Equipment:</b> ${esc(eqName(ex))} · <b>Level:</b> ${esc(ex.level||'n/a')}${ex.mechanic?' · '+esc(ex.mechanic):''}</p><h3>How to do it</h3><ol>${(ex.instructions||[]).map(s=>`<li>${esc(s)}</li>`).join('')||'<li>No steps listed.</li>'}</ol><p class="tip">General guidance: exhale on the effort, inhale on the way back. Start light, control the lowering, stop for sharp pain.</p><h3>Log a set</h3><div class="form"><label>Weight kg<input id="eW" type="number" step=".5" inputmode="decimal"></label><label>Reps<input id="eR" type="number" inputmode="numeric"></label><label>Sets<input id="eS" type="number" inputmode="numeric"></label></div><button class="primary" id="eLog">Save to history</button><p class="hint">${last.length?'Last time: '+last.map(l=>`${esc(l.weight)} kg × ${esc(l.reps)} × ${esc(l.sets)}`).join(' · '):'No history for this exercise yet.'}</p>`+a.map(g=>`<h3>${g[0]}</h3><div class="chips2">${g[1].map(x=>`<button data-alt="${esc(x.id)}">${esc(x.name)}</button>`).join('')}</div>`).join('');
+const d=E('#exDialog');d.scrollTop=0;if(!d.open)d.showModal()}
+E('#exDialog').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+if(b.id==='eClose'){stop();E('#eMedia').classList.remove('fs');E('#exDialog').close()}
+if(b.id==='ePlay'){playing=!playing;b.textContent=playing?'Pause':'Play';run()}
+if(b.id==='eRe'){fi=0;playing=true;E('#ePlay').textContent='Pause';show();run()}
+if(b.id==='eFs')E('#eMedia').classList.add('fs');
+if(b.dataset.alt)openEx(DB.find(x=>x.id===b.dataset.alt));
+if(b.id==='eLog'){const w=E('#eW').value,r=+E('#eR').value,s=+E('#eS').value;if(w===''||!(+w>=0)||!(r>0)||!(s>0))return showToast('Enter weight, reps and sets.');db.lifts.push({date:today(),name:cur.plan||cur.ex.name,weight:w,reps:String(r),sets:String(s)});save();renderHistory();showToast('Set saved.');openEx(cur.ex,cur.plan)}});
+E('#eMedia').addEventListener('click',e=>{if(E('#eMedia').classList.contains('fs'))E('#eMedia').classList.remove('fs')});
+E('#exDialog').addEventListener('close',stop);
+/* ---------- workout integration ---------- */
+const deco=sel=>document.querySelectorAll(sel+' .exercise b').forEach(b=>{if(b.querySelector('.demo'))return;const n=b.textContent,x=document.createElement('button');x.className='demo';x.textContent='Demo';x.setAttribute('aria-label','Watch demo: '+n);x.dataset.n=n;b.append(' ',x)});
+document.addEventListener('click',async e=>{const b=e.target.closest('.demo');if(!b)return;try{await load()}catch{return showToast('Demos need internet the first time, then work offline.')}
+const ex=match(b.dataset.n);if(ex)return openEx(ex,b.dataset.n);cur={ex:{name:b.dataset.n,images:[],primaryMuscles:[],secondaryMuscles:[]},plan:b.dataset.n};stop();fr=[];E('#eName').textContent=b.dataset.n;E('#eMatch').textContent='';E('#eMedia').innerHTML='<p class="hint">No exact demonstration found for this exercise, so none is shown rather than a wrong one.</p>';E('#eCtl').hidden=true;E('#eInfo').innerHTML='<button class="secondary" id="eSearch">Search the library</button>';E('#exDialog').showModal();E('#eInfo').onclick=()=>{E('#exDialog').close();document.querySelector('nav [data-page="library"]').click();E('#lSearch').value=b.dataset.n.split('/')[0].replace(/\(.*?\)/g,'').trim();F.q=E('#lSearch').value;list()}});
+const _rg=renderGym;renderGym=function(){_rg();deco('#exerciseList')};const _rt=renderToday;renderToday=function(){_rt();deco('#exerciseList');deco('#todayExercises')};window.PMlib={load,match,img};renderToday();
+})();

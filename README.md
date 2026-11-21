@@ -72,14 +72,10 @@ After uploading v2 to GitHub, close and reopen the app once or twice so the new 
 - Share image with route, distance, time and pace. The first and last 200 m can be hidden to protect your home location.
 - Web limits: keep the screen on (iPhone cannot track in the background), plain route drawing (no street map). Activities are saved on this device and included in backups.
 
-
-## v11 focused redesign
-- Simplified primary navigation to Today, Train, Eat and You; secondary tools remain accessible from You.
-- Today focuses on the planned workout, a single start action and next meal.
-- Guided workout flow presents one exercise at a time, tracks completed sets and starts a rest countdown.
-- Nutrition meal list is presented as a time-based timeline.
-- Workout music is removed from the main workout flow and opened from a floating music shortcut.
-- Existing v10 modules and local data storage are retained.
-
-## v11 scope and limitations
-This remains an offline-first browser PWA, not a compiled native app. The guided session uses the existing workout plan and tracks set completion in the active session; it does not yet save a complete structured workout log to history. The exercise visual area is a reference placeholder, not a licensed exercise video. The meal timeline displays the existing meal plan; marking meals eaten and macro-matched meal swaps are not yet implemented. Cloud accounts, cross-device sync, reliable background push and server AI require backend services and are not included in this static build.
+## v11: calm Today, guided sessions, 4 tabs
+- **Today:** one workout card with Start, the next meal, and thin calorie, protein and water lines. Streak, weekly bars, checklist and hydration moved to You → Progress.
+- **Guided session:** one exercise at a time with demo, set counter, weight and reps steppers, Done set, automatic 90 s rest, summary (time, volume, personal bests). Logs to history.
+- **Eat:** the day as a timeline (tick, next highlighted, later faded). Swipe right to mark eaten. Swap suggests a dish with similar protein (diet-aware).
+- **Tabs:** Today, Train (Plan, Library, Run), Eat, You (Progress, Photos, Coach). Settings stay under the gear button.
+- **Music:** floating button on every screen, opens the music sheet.
+- Not included: accounts, cloud sync, background push reminders, AI chat coach. These need a backend.

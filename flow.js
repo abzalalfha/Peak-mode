@@ -1,0 +1,50 @@
+/* PEAK MODE: calm Today screen, 4-tab layout, meal timeline + swaps, floating music */
+(()=>{
+const E=s=>document.querySelector(s),ALL=s=>[...document.querySelectorAll(s)],tab=p=>E(`nav [data-page="${p}"]`),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const mac=m=>{const r=/(\d+)\s*kcal\s*·\s*(\d+)g/.exec(m[4]||'');return r?[+r[1],+r[2]]:[0,0]};
+const VEG=[['','Lunch','Paneer bhurji + chapati','Paneer 120 g; 2 chapatis; onion-tomato 100 g; oil 5 g','~630 kcal · 29g protein','Crumble paneer and cook with onion, tomato, turmeric and chilli for 5 minutes.'],['','Lunch','Rajma + rice','Rajma curry 200 g; cooked rice 200 g; salad 100 g','~520 kcal · 18g protein','Pressure cook soaked rajma, then simmer with onion-tomato masala.'],['','Dinner','Soya chunks curry + chapati','Soya chunks 50 g dry; 2 chapatis; vegetables 150 g; oil 5 g','~480 kcal · 33g protein','Soak soya in hot water 10 minutes, squeeze, then cook in masala.'],['','Dinner','Dal, rice and curd','Dal 200 g; cooked rice 200 g; curd 150 g','~550 kcal · 23g protein','Tempering of cumin, garlic and curry leaves lifts plain dal.'],['','Breakfast','Besan chilla + curd','2 chillas (160 g); curd 150 g','~380 kcal · 20g protein','Thin batter, non-stick pan, very little oil.']];
+const dietOk=n=>{const d=(db.prefs||{}).diet;if(!d||d==='non')return true;n=n.toLowerCase();return !/chicken|fish|mathi|ayala|sardine|mutton|beef|prawn/.test(n)&&!(d==='veg'&&/egg|omelette/.test(n))};
+window.mealsFor=d=>{const b=menus[dateMenu(d)%7].map(m=>m.slice()),s=(db.swaps||{})[ymd(d)]||{};Object.keys(s).forEach(i=>{if(b[i])b[i]=[b[i][0],b[i][1],...s[i]]});return b};
+window.nextMeal=(ms,e)=>{const n=new Date(),now=n.getHours()*60+n.getMinutes(),mm=t=>{const[h,m]=t.split(':');return +h*60+ +m},u=ms.map((_,i)=>i).filter(i=>!e.includes(i));return u.find(i=>mm(ms[i][0])>=now-45)??u[0]??-1};
+function options(i){const cur=mealsFor(new Date())[i],[k0,p0]=mac(cur),pool=[].concat(...menus).concat(VEG).filter(m=>m[1]===cur[1]&&m[2]!==cur[2]&&dietOk(m[2]+' '+m[3])),pick=t=>pool.filter(m=>Math.abs(mac(m)[1]-p0)<=Math.max(5,p0*t)).sort((a,b)=>Math.abs(mac(a)[0]-k0)-Math.abs(mac(b)[0]-k0));let r=pick(.25);if(r.length<2)r=pick(.5);const o=[];r.forEach(m=>{if(!o.some(x=>x[2]===m[2]))o.push(m)});return o.slice(0,5)}
+document.body.insertAdjacentHTML('beforeend','<dialog id="swapDlg"><div class="row"><h2>Swap this meal</h2><button id="swX" aria-label="Close">✕</button></div><p class="hint" id="swNote"></p><div id="swList"></div></dialog><dialog id="musicDlg" class="sheet"><div class="row"><h2>Music</h2><button id="mdX" aria-label="Close">✕</button></div></dialog>');
+let swI=0;E('#swX').onclick=()=>E('#swapDlg').close();
+E('#todayMeals').addEventListener('click',e=>{const b=e.target.closest('[data-sw]');if(!b)return;swI=+b.dataset.sw;const t=ymd(new Date()),cur=mealsFor(new Date())[swI],o=options(swI),sw=(db.swaps||{})[t]&&db.swaps[t][swI];
+E('#swNote').textContent=`Similar protein to ${cur[2]} (${mac(cur)[1]} g)${(db.prefs||{}).diet==='veg'?', vegetarian only':''}.`;
+E('#swList').innerHTML=o.map((m,j)=>`<button class="lrow" data-o="${j}"><span><b>${esc(m[2])}</b><small>${esc(m[4])}</small></span></button>`).join('')+(o.length?'':'<p class="hint">No similar dish for this slot yet. Use Add food to log what you ate instead.</p>')+(sw?'<button class="secondary" id="swReset">Back to the original meal</button>':'');E('#swapDlg').showModal();E('#swList')._o=o});
+E('#swList').addEventListener('click',e=>{const t=ymd(new Date()),s=db.swaps||={};if(e.target.closest('#swReset')){delete (s[t]||{})[swI]}else{const b=e.target.closest('[data-o]');if(!b)return;(s[t]||={})[swI]=E('#swList')._o[+b.dataset.o].slice(2)}save();E('#swapDlg').close();renderToday();showToast('Meal updated.')});
+/* swipe right to mark eaten */
+let sx=0,sy=0;E('#todayMeals').addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
+E('#todayMeals').addEventListener('touchend',e=>{const t=e.changedTouches[0],it=e.target.closest('.tli');if(it&&t.clientX-sx>80&&Math.abs(t.clientY-sy)<40){const c=it.querySelector('input');c.checked=!c.checked;c.dispatchEvent(new Event('change',{bubbles:true}));navigator.vibrate&&navigator.vibrate(20)}});
+/* reorganise: progress, eat, train */
+const card=s=>E(s).closest('article');
+E('#progress').prepend(E('#backupNote'),card('#waterBar'),card('#checks'),E('#weekBars'),E('.hero'));
+E('#food').prepend(card('#todayMeals'));
+const gym=E('#gym'),ws=document.createElement('div');ws.id='startRow';ws.innerHTML='<button class="primary" id="gStart">Start today\'s session</button>';const wp=document.createElement('article');wp.className='card';wp.id='weekPlan';
+const first=E('#gym .card:not(#music):not(#planCard)');gym.insertBefore(ws,E('#planCard'));gym.insertBefore(wp,E('#planCard'));const dayCard=E('#exerciseList').closest('article');gym.insertBefore(dayCard,E('#planCard'));gym.append(E('#planCard'),E('#restClock').closest('article'));
+function week(){const m=new Date();m.setDate(m.getDate()-((m.getDay()+6)%7));const t=ymd(new Date()),ti=(new Date().getDay()+6)%7;wp.innerHTML='<small>THIS WEEK</small>'+[0,1,2,3,4,5,6].map(i=>{const d=new Date(m);d.setDate(m.getDate()+i);const w=workoutFor(d),done=(db.checks[ymd(d)]||[]).includes(1);return`<button class="wrow ${ymd(d)===t?'on':''}" data-w="${i}"><span>${'Mon Tue Wed Thu Fri Sat Sun'.split(' ')[i]}</span><b>${esc(w[0])}</b><em>${done?'Done':w[2].length+' ex'}</em></button>`}).join('')}
+wp.addEventListener('click',e=>{const b=e.target.closest('[data-w]');if(!b)return;const ti=(new Date().getDay()+6)%7;workOffset=(+b.dataset.w-ti+7)%7;renderGym();dayCard.scrollIntoView({behavior:'smooth'})});
+E('#gStart').onclick=()=>openSession();
+/* music floating button */
+const mu=E('#music');E('#musicDlg').append(mu);document.body.insertAdjacentHTML('beforeend','<button id="fab" aria-label="Music" title="Music"><svg viewBox="0 0 24 24"><path d="M9 18V6l10-2v12"/><circle cx="6" cy="18" r="3"/><circle cx="16" cy="16" r="3"/></svg></button>');
+E('#fab').onclick=()=>E('#musicDlg').showModal();E('#mdX').onclick=()=>E('#musicDlg').close();const au=E('#aud');['play','pause'].forEach(v=>au.addEventListener(v,()=>E('#fab').classList.toggle('live',!au.paused)));
+/* 4 tabs + sub navigation */
+E('#dock').remove();E('#moreDlg')&&E('#moreDlg').remove();
+const GR={today:['today'],train:['gym','library','run'],eat:['food'],you:['progress','physique','coach']},SUB={gym:'Plan',library:'Library',run:'Run',progress:'Progress',physique:'Photos',coach:'Coach'},IC={today:'<path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',train:'<path d="M6 7v10M3 9v6M18 7v10M21 9v6M6 12h12"/>',eat:'<path d="M7 3v7a2 2 0 0 0 2 2v9M11 3v7M5 3v7M17 3c-2 2-2 6 0 8v10"/>',you:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/>'},NM={today:'Today',train:'Train',eat:'Eat',you:'You'},last={train:'gym',you:'progress'};
+document.body.insertAdjacentHTML('beforeend',`<div id="dock" role="navigation" aria-label="Main">${Object.keys(GR).map(g=>`<button data-g="${g}" aria-label="${NM[g]}"><svg viewBox="0 0 24 24">${IC[g]}</svg><span>${NM[g]}</span></button>`).join('')}</div>`);
+const sub=document.createElement('div');sub.id='subnav';sub.className='chips2';E('.page').before(sub);
+const cur=()=>{const a=E('nav .active');return a&&a.dataset.page},grp=p=>Object.keys(GR).find(g=>GR[g].includes(p));
+function mark(){const p=cur(),g=grp(p);if(!g)return;if(last[g])last[g]=p;ALL('#dock button').forEach(b=>b.classList.toggle('on',b.dataset.g===g));sub.hidden=GR[g].length<2;sub.innerHTML=GR[g].map(x=>`<button data-p="${x}" class="${x===p?'on':''}">${SUB[x]}</button>`).join('')}
+E('#dock').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;tab(last[b.dataset.g]||GR[b.dataset.g][0]).click();scrollTo(0,0)});sub.addEventListener('click',e=>{const b=e.target.closest('button');if(b)tab(b.dataset.p).click()});
+new MutationObserver(mark).observe(E('nav'),{subtree:true,attributes:true,attributeFilter:['class']});
+/* Today home */
+const mins=w=>{const p=db.plan;return p&&!(p.where==='gym'&&p.types.includes('strength'))?p.mins:Math.round(w[2].length*9/5)*5};
+const ln=(l,v,g,u,x='')=>`<div class="pl"><div><span>${l}</span><b>${v.toLocaleString('en-IN')}${u} / ${g.toLocaleString('en-IN')}${u}${x}</b></div><div class="track"><i style="width:${Math.min(100,g?v/g*100:0)}%"></i></div></div>`;
+const home=document.createElement('div');home.id='home';E('#today').prepend(home);
+function draw(){const w=workoutFor(new Date()),t=ymd(new Date()),done=(db.checks[t]||[]).includes(1),ms=mealsFor(new Date()),e=db.eaten[t]||[],ni=nextMeal(ms,e),[k,p]=PM.totals(),T=db.targets,wt=db.water[t]||0,ci=(db.checkins||{})[t];
+home.innerHTML=`<article class="card c-lime hero2"><small>${done?'DONE TODAY':'TODAY'}</small><h2>${esc(w[0])}</h2><p>${w[2].length} exercises · ${mins(w)} min</p><button class="primary" id="hStart">${done?'Train again':'Start'}</button></article>
+<button class="nextmeal" id="hMeal"><small>${ni<0?'MEALS':'NEXT MEAL'}</small><b>${ni<0?'All meals done for today':`${ms[ni][0]} · ${esc(ms[ni][2])} · ${mac(ms[ni])[0]} kcal`}</b></button>
+<div class="plines">${ln('Calories',k,T.kcal,'')}${ln('Protein',p,T.protein,' g')}${ln('Water',+(wt/1000).toFixed(2),3,' L')}<button class="link" id="hWater">+ 250 ml water</button></div>${ci?'':'<button class="link" id="hCheck">How do you feel today? Check in</button>'}`}
+home.addEventListener('click',e=>{const id=(e.target.closest('button')||{}).id;if(id==='hStart')openSession();if(id==='hMeal')E('#dock [data-g=eat]').click();if(id==='hCheck'){tab('coach').click()}if(id==='hWater'){db.water[ymd(new Date())]=(db.water[ymd(new Date())]||0)+250;save();renderWater();draw();navigator.vibrate&&navigator.vibrate(15)}});
+const _rt=renderToday;renderToday=function(){_rt();draw();week();mark()};renderToday();mark();
+})();
