@@ -23,8 +23,14 @@ E('#rGo').textContent=!R.on?'Start':R.paused?'Resume':'Pause';E('#rEnd').hidden=
 const ALL=s=>[...document.querySelectorAll(s)];
 function onPos(p){if(!R.on||R.paused)return;const c=p.coords;if(c.accuracy>35)return msg(`Weak GPS signal (±${Math.round(c.accuracy)} m). Waiting for a better fix.`);msg(`GPS good (±${Math.round(c.accuracy)} m)`);const pt=[+c.latitude.toFixed(5),+c.longitude.toFixed(5),p.timestamp];
 if(R.last){const d=hav(R.last,pt),dt=(pt[2]-R.last[2])/1000;if(d<4||(dt>0&&d/dt>TY[R.type][1]))return;R.dist+=d;while(R.dist>=(R.splits.length+1)*1000)R.splits.push(Math.round(secs()))}R.last=pt;R.pts.push(pt);paint()}
-function gerr(e){msg(e.code===1?'Location is blocked. Allow location for this site in your browser or iPhone settings, then try again.':'GPS signal unavailable. Move to open sky and try again.')}
-async function start(){if(!navigator.geolocation)return msg('This device or browser has no GPS support.');Object.assign(R,{on:1,paused:0,pts:[],dist:0,ms:0,seg:Date.now(),last:null,splits:[]});R.wid=navigator.geolocation.watchPosition(onPos,gerr,{enableHighAccuracy:true,maximumAge:0,timeout:20000});R.tm=setInterval(paint,1000);R.ck=setInterval(draft,20000);try{R.lock=await navigator.wakeLock.request('screen')}catch{msg('Keep the screen on while tracking. This browser cannot hold it awake.')}paint()}
+async function halt(text){if(!R.on)return;R.err=1;if(R.dist>=50){await finish();msg(text+' The distance recorded so far was saved.')}
+ else{navigator.geolocation.clearWatch(R.wid);clearInterval(R.tm);clearInterval(R.ck);R.lock&&R.lock.release().catch(()=>0);await PM.delP('run-draft').catch(()=>0);Object.assign(R,{on:0,pts:[],dist:0,ms:0,splits:[],paused:0});paint();msg(text)}}
+function gerr(e){if(e.code===1)return halt(DENIED);msg(e.code===3?'Still looking for a GPS signal. Move to open sky.':'GPS signal unavailable. Move to open sky and try again.')}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&R.on&&navigator.wakeLock)navigator.wakeLock.request('screen').then(l=>R.lock=l).catch(()=>0)});
+const DENIED='Location is blocked for this site. Allow location in your browser or iPhone settings, then press Start again. Nothing is being recorded.';
+async function start(){if(!navigator.geolocation)return msg('This device or browser has no GPS support.');
+try{const q=await navigator.permissions.query({name:'geolocation'});if(q.state==='denied')return msg(DENIED)}catch{}
+Object.assign(R,{on:1,paused:0,pts:[],dist:0,ms:0,seg:Date.now(),last:null,splits:[],err:0});R.wid=navigator.geolocation.watchPosition(onPos,gerr,{enableHighAccuracy:true,maximumAge:0,timeout:20000});R.tm=setInterval(paint,1000);R.ck=setInterval(draft,20000);try{R.lock=await navigator.wakeLock.request('screen')}catch{if(R.on&&!R.err)msg('Keep the screen on while tracking. This browser cannot hold it awake.')}paint()}
 const draft=()=>R.on&&PM.putP({id:'run-draft',type:'draft',run:mk()}).catch(()=>0);
 const mk=()=>{const w=(db.profile&&db.profile.weight)||70,t=Math.round(secs());return{id:'r'+Date.now(),type:'run',kind:R.type,date:today(),dist:Math.round(R.dist),time:t,pts:R.pts,splits:R.splits,kcal:Math.round(w*R.dist/1000*TY[R.type][2])}};
 function toggle(){if(!R.on)return start();if(R.paused){R.paused=0;R.seg=Date.now();R.last=null}else{R.ms+=Date.now()-R.seg;R.paused=1}paint()}

@@ -90,3 +90,12 @@ After uploading v2 to GitHub, close and reopen the app once or twice so the new 
 - A safety copy of your previous settings and logs is kept on the device (`peakModeLifetimeV1_beforeRestore`) in case a restore was a mistake.
 - Backups now carry a format marker and app version. Backups made with v13 or earlier still restore.
 - Offline cache renamed `peak-mode-v13-1`, so devices pick up the update. Close and reopen the app twice after publishing.
+
+## v13.2 — Phase 1, Step 2: data safety, resumable workouts, GPS and timer fixes
+- **Storage protection:** the app asks the browser to keep your data safe and shows the result in You → Progress → Backup. On iPhone, add the app to the Home Screen for the best protection.
+- **Backup reminder:** Today shows a reminder after 3 days without a first backup, or when the last backup is 7 or more days old. "Later" hides it for the day.
+- **Workouts survive interruptions:** a guided session is saved as you go. After a reload, phone call or app switch, Today shows "Unfinished session" with Resume or Discard. Sessions older than 12 hours are not offered.
+- **Rest timers follow the real clock** (guided session and Train → Plan). A locked or throttled screen can no longer make rests run slow. Web apps cannot make a sound while the iPhone is locked; the rest simply ends when you open it again.
+- **GPS permission:** if location is blocked, you now get a clear message, tracking does not start, and the button stays on Start. If permission is lost mid-run, the distance recorded so far is saved.
+- **History fixes:** timed exercises (plank, walks, mobility) are no longer saved as lifts with 0 kg × 0 reps. A session with skipped exercises is saved but is not marked as a completed workout.
+- Offline cache renamed `peak-mode-v13-2`. Close and reopen the app twice after publishing.
