@@ -83,3 +83,10 @@ After uploading v2 to GitHub, close and reopen the app once or twice so the new 
 ## v12
 - Run is a main tab again (Today, Train, Run, Eat, You), always visible.
 - Run PNG: your route, PEAK MODE logo, distance, time and pace. Choose dark, light or transparent background. Download PNG or Share.
+
+## v13.1 — Phase 1, Step 1: security and safe backup/restore
+- **Security fix:** all text you type (meal names, food names, notes, lift names) is now shown as plain text and can no longer run as code. This also protects against a hostile backup file.
+- **Restore is now safe:** a backup file is fully checked before anything changes. Wrong or damaged files are rejected with a clear message and your data stays untouched. Valid files show a summary and ask for confirmation. Your settings and logs are replaced by the backup. Photos and activities in the backup are added to the ones already on the device.
+- A safety copy of your previous settings and logs is kept on the device (`peakModeLifetimeV1_beforeRestore`) in case a restore was a mistake.
+- Backups now carry a format marker and app version. Backups made with v13 or earlier still restore.
+- Offline cache renamed `peak-mode-v13-1`, so devices pick up the update. Close and reopen the app twice after publishing.
