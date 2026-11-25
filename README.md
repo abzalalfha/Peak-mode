@@ -99,3 +99,10 @@ After uploading v2 to GitHub, close and reopen the app once or twice so the new 
 - **GPS permission:** if location is blocked, you now get a clear message, tracking does not start, and the button stays on Start. If permission is lost mid-run, the distance recorded so far is saved.
 - **History fixes:** timed exercises (plank, walks, mobility) are no longer saved as lifts with 0 kg × 0 reps. A session with skipped exercises is saved but is not marked as a completed workout.
 - Offline cache renamed `peak-mode-v13-2`. Close and reopen the app twice after publishing.
+
+## v13.2.1 — Fix: shared route image now matches the preview
+- The PNG used to cut off the first and last 200 m and then re-fit what was left to the picture, so it looked like a different map (and the start/finish dots moved to the cut points). The preview in the app never applied the hiding.
+- Now the preview and the PNG use the same drawing code. With "Hide first and last 200 m" ticked, the route keeps exactly the same size and position, and only the hidden ends are left out. The preview updates when you tick or untick the box.
+- When ends are hidden, no start/finish dots are drawn (they would show the wrong place).
+- Activities under 600 m cannot hide their ends safely, so with the box ticked the route is left out of the image and a short note is shown. Untick the box to include the full route.
+- "Transparent" background has light text, so it is meant for placing over a dark photo. The option now says so.
