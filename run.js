@@ -15,8 +15,8 @@ function draw(cv,r,hide,fg,end){const shown=hide?trim(r.pts):r.pts;route(cv,show
 function img(r,hide,bg){const c=document.createElement('canvas');c.width=1080;c.height=1350;const x=c.getContext('2d'),f='system-ui,-apple-system,Segoe UI,sans-serif',L=bg==='light',tx=L?'#16190a':'#f4f4ef',mu=L?'#5d5d66':'#9b9ba3',ac=L?'#e8591a':accent();
 if(bg!=='clear'){x.fillStyle=L?'#f4f4ef':'#101012';x.fillRect(0,0,1080,1350)}
 const rc=document.createElement('canvas');rc.width=900;rc.height=675;draw(rc,r,hide,ac,tx);x.drawImage(rc,90,200);
-x.save();x.translate(76,44);x.scale(.2,.2);x.lineWidth=30;x.lineCap='round';x.strokeStyle=ac;x.stroke(new Path2D('M104 256h304M145 194v124M367 194v124M104 216v80M408 216v80'));x.fillStyle=tx;x.fill(new Path2D('M180 160h152v42H222v108h110v42H180z'));x.restore();
-x.fillStyle=ac;x.font=`800 46px ${f}`;x.fillText('PEAK MODE',196,112);x.fillStyle=mu;x.font=`500 34px ${f}`;x.textAlign='right';x.fillText((TY[r.kind]||TY.run)[0]+' · '+dmy(r.date),990,112);x.textAlign='left';
+PMLOGO.draw(x,90,52,60,ac,tx);
+x.fillStyle=mu;x.font=`500 34px ${f}`;x.textAlign='right';x.fillText((TY[r.kind]||TY.run)[0]+' · '+dmy(r.date),990,94);x.textAlign='left';
 x.fillStyle=tx;x.font=`800 170px ${f}`;x.fillText(km(r.dist),90,1070);x.fillStyle=mu;x.font=`600 40px ${f}`;x.fillText('KILOMETRES',96,1126);
 x.fillStyle=tx;x.font=`700 64px ${f}`;x.fillText(fmtT(r.time),90,1244);x.fillText(pace(r.dist,r.time),500,1244);x.fillStyle=mu;x.font=`500 30px ${f}`;x.fillText('TIME',92,1292);x.fillText('PACE (MIN/KM)',502,1292);return c}
 /* live tracking */

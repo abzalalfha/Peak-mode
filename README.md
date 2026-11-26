@@ -114,3 +114,10 @@ After uploading v2 to GitHub, close and reopen the app once or twice so the new 
 - **Allergies:** meals, swaps, the 7-day menu and food search skip or flag items matching your allergy list. Matching uses names and listed portions only, so hidden ingredients cannot be seen. Foods hidden by search can be shown with one tap. If no safe replacement exists, the meal is flagged and a warning is shown.
 - **Injuries:** in Profile → Health you can pick Knee, Lower back, Shoulder or Wrist/elbow. Exercises that may load them get a ⚠ label in the plan and in the guided session. This is based on exercise names only and is not medical advice.
 - Backups now keep your areas to protect and start date. Offline cache renamed `peak-mode-v13-3`.
+
+## v13.3.1 — New PEAK MODE logo
+- The new logo replaces the old dumbbell icon everywhere: home-screen/app icon, favicon, welcome screen, top of the Today screen and the shared run image. The mark was rebuilt as clean vector geometry from your logo image, and the wordmark is set in Montserrat (SIL Open Font License), so it stays sharp at any size.
+- On the default Volt theme the mark is your brand lime. Other themes recolour it to their accent so it always matches (light themes use dark lettering).
+- New files: `logo.js` (logo shapes used by the app), `logo.svg` and `logo-mark.svg` (standalone brand files), `icon-192.png`, `icon-512.png`, `icon-maskable-512.png`, `apple-touch-icon.png`. `icon.svg` was replaced.
+- On Android, remove and re-add the app to the Home Screen to see the new icon. iPhone also needs a re-add.
+- Shared run image: the date text is now aligned with the logo.

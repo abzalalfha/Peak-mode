@@ -51,3 +51,4 @@ dialog{border-radius:28px}
 #rEnd[hidden],#rDraft[hidden]{display:none!important}#rCv{min-height:120px}
 
 .lim,.warnline{display:block;grid-column:1/-1;width:100%;margin:6px 0 0;color:var(--warn);font-size:12px;font-weight:600}.warnline{margin:4px 0}#rampList li.now{font-weight:700;color:var(--green)}
+.plogo{display:block;max-width:100%}.plogo .pm{fill:var(--green)}.plogo .pw{fill:var(--text)}.brandlogo{margin:0 0 12px}.oblogo{margin-bottom:18px}
