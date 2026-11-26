@@ -49,3 +49,5 @@ dialog{border-radius:28px}
 .hero2 h2{line-height:1.05}
 #dock button{padding:0 14px}#dock{gap:4px}
 #rEnd[hidden],#rDraft[hidden]{display:none!important}#rCv{min-height:120px}
+
+.lim,.warnline{display:block;grid-column:1/-1;width:100%;margin:6px 0 0;color:var(--warn);font-size:12px;font-weight:600}.warnline{margin:4px 0}#rampList li.now{font-weight:700;color:var(--green)}

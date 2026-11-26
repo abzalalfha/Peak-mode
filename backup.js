@@ -1,7 +1,7 @@
 /* PEAK MODE v13.1: safe backup and restore. Every imported value is checked before anything on the device is changed. */
 (()=>{
 const E=s=>document.querySelector(s);
-const BACKUP_FORMAT='peak-mode-backup',APP_VERSION='13.2.1',MAX_BYTES=120*1024*1024;
+const BACKUP_FORMAT='peak-mode-backup',APP_VERSION='13.3',MAX_BYTES=120*1024*1024;
 const isObj=x=>!!x&&typeof x==='object'&&!Array.isArray(x);
 const DATE=/^\d{4}-\d{2}-\d{2}$/,IMG=/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+\/=]+$/,ID=/^[A-Za-z0-9_-]{1,80}$/,TIME=/^\d{2}:\d{2}$/;
 const num=(x,min,max)=>{if(x===''||x===null||typeof x==='boolean'||Array.isArray(x))return null;const n=Number(x);return Number.isFinite(n)&&n>=min&&n<=max?n:null};
@@ -30,8 +30,8 @@ function cleanDb(j){
  if(typeof j.name==='string')c.name=j.name.slice(0,24);
  if(Array.isArray(j.goals))c.goals=j.goals.filter(g=>['muscle','fat','lean','gain','fit','maintain','strength','run','yoga'].includes(g)).slice(0,9);
  if(isObj(j.plan)){const p=j.plan,types=(Array.isArray(p.types)?p.types:[]).filter(x=>['strength','hiit','run','yoga'].includes(x));if(types.length)c.plan={where:oneOf(p.where,['gym','home','out'],'gym'),eq:(Array.isArray(p.eq)?p.eq:[]).filter(x=>['db','band','bar'].includes(x)),types,days:oneOf(+p.days,[3,4,5,6],4),mins:oneOf(+p.mins,[20,30,45,60],45),lvl:oneOf(p.lvl,['b','i','a'],'b')}}
- if(isObj(j.prefs)){const p=j.prefs;c.prefs={diet:oneOf(p.diet,['veg','egg','non'],'non'),allergies:str(p.allergies,200),meals:oneOf(+p.meals,[3,4,5],4),budget:/^\d{0,7}$/.test(String(p.budget??''))?String(p.budget??''):'',region:oneOf(p.region,['','S','N','W','E','X'],''),time:oneOf(p.time,['morning','afternoon','evening'],'morning'),limits:str(p.limits,500)}}
- c.onboarded=j.onboarded===true;if(j.planAsked)c.planAsked=1;
+ if(isObj(j.prefs)){const p=j.prefs;c.prefs={diet:oneOf(p.diet,['veg','egg','non'],'non'),allergies:str(p.allergies,200),meals:oneOf(+p.meals,[3,4,5],4),budget:/^\d{0,7}$/.test(String(p.budget??''))?String(p.budget??''):'',region:oneOf(p.region,['','S','N','W','E','X'],''),time:oneOf(p.time,['morning','afternoon','evening'],'morning'),limits:str(p.limits,500),areas:(Array.isArray(p.areas)?p.areas:[]).filter(x=>['knee','back','shoulder','wrist'].includes(x))}}
+ if(DATE.test(String(j.startDate)))c.startDate=j.startDate;if(DATE.test(String(j.firstUse)))c.firstUse=j.firstUse;c.onboarded=j.onboarded===true;if(j.planAsked)c.planAsked=1;
  c.theme=oneOf(j.theme,['volt','sunset','ember','ocean','violet','light'],'volt');
  if(typeof j.playlist==='string'&&/^https?:\/\//i.test(j.playlist)&&j.playlist.length<=500)c.playlist=j.playlist;
  c.swaps=dateMap(j.swaps,v=>{if(!isObj(v))return undefined;const o={};Object.keys(v).forEach(i=>{if(/^\d{1,2}$/.test(i)&&Array.isArray(v[i])&&v[i].length>=3&&v[i].every(x=>typeof x==='string'))o[i]=v[i].slice(0,4).map(x=>x.slice(0,300))});return o});
