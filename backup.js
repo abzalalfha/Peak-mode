@@ -1,7 +1,7 @@
 /* PEAK MODE v13.1: safe backup and restore. Every imported value is checked before anything on the device is changed. */
 (()=>{
 const E=s=>document.querySelector(s);
-const BACKUP_FORMAT='peak-mode-backup',APP_VERSION='13.3.1',MAX_BYTES=120*1024*1024;
+const BACKUP_FORMAT='peak-mode-backup',APP_VERSION='13.4',MAX_BYTES=120*1024*1024;
 const isObj=x=>!!x&&typeof x==='object'&&!Array.isArray(x);
 const DATE=/^\d{4}-\d{2}-\d{2}$/,IMG=/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+\/=]+$/,ID=/^[A-Za-z0-9_-]{1,80}$/,TIME=/^\d{2}:\d{2}$/;
 const num=(x,min,max)=>{if(x===''||x===null||typeof x==='boolean'||Array.isArray(x))return null;const n=Number(x);return Number.isFinite(n)&&n>=min&&n<=max?n:null};
@@ -24,7 +24,8 @@ function cleanDb(j){
  c.measurements=(Array.isArray(j.measurements)?j.measurements:[]).slice(0,5000).map(x=>{if(!isObj(x)||!DATE.test(String(x.date)))return null;const o={date:x.date,weight:numStr(x.weight,20,400),waist:numStr(x.waist,30,300),chest:numStr(x.chest,30,300),arm:numStr(x.arm,10,100)};return o.weight||o.waist||o.chest||o.arm?o:null}).filter(Boolean);
  c.lifts=(Array.isArray(j.lifts)?j.lifts:[]).slice(0,20000).map(x=>{if(!isObj(x)||!DATE.test(String(x.date)))return null;const name=str(x.name,80).trim(),w=num(x.weight,0,1000),r=num(x.reps,0,1000),s=num(x.sets,0,100);return name&&w!==null&&r!==null&&s!==null?{date:x.date,name,weight:String(w),reps:String(r),sets:String(s)}:null}).filter(Boolean);
  c.foods=(Array.isArray(j.foods)?j.foods:[]).slice(0,500).map(x=>{if(!isObj(x)||!/^u\d+$/.test(String(x.id)))return null;const name=str(x.name,80).trim(),k=num(x.k,0,2000),p=num(x.p,0,200),cb=num(x.c,0,200),f=num(x.f,0,200);if(!name||k===null||p===null||cb===null||f===null)return null;const m=(Array.isArray(x.m)?x.m:[]).slice(0,12).map(q=>Array.isArray(q)&&typeof q[0]==='string'&&num(q[1],1,5000)!==null?[q[0].slice(0,40),+q[1]]:null).filter(Boolean);return{id:x.id,name,reg:'A',k,p,c:cb,f,m:m.length?m:[['serving (100 g)',100]]}}).filter(Boolean);
- const st=isObj(j.settings)?j.settings:{};c.settings={};['workout','breakfast','lunch','snack','dinner'].forEach((k,i)=>c.settings[k]=TIME.test(String(st[k]))?st[k]:['05:45','08:00','13:00','16:30','20:00'][i]);
+ const st=isObj(j.settings)?j.settings:{};c.settings={};['workout','breakfast','lunch','snack','dinner'].forEach((k,i)=>c.settings[k]=TIME.test(String(st[k]))?st[k]:['05:45','08:00','13:00','16:30','20:00'][i]);['knowledge','quiz'].forEach(k=>{if(typeof st[k]==='boolean')c.settings[k]=st[k]});
+ if(isObj(j.learn)){const l=j.learn;c.learn={a:dateMap(l.a,v=>isObj(v)&&num(v.q,0,999)!==null?{q:num(v.q,0,999),c:v.c?1:0,x:num(v.x,0,3)??0}:undefined),streak:num(l.streak,0,100000)??0,best:num(l.best,0,100000)??0,last:DATE.test(String(l.last))?l.last:'',seed:num(l.seed,0,100000)??0}}
  const t=isObj(j.targets)?j.targets:{};c.targets={kcal:num(t.kcal,800,10000)??2500,protein:num(t.protein,20,500)??180,water:num(t.water,30,240)??90};
  if(isObj(j.profile)){const p=j.profile,o={};const a=num(p.age,12,90),h=num(p.height,120,230),w=num(p.weight,30,250);if(a!==null)o.age=a;if(h!==null)o.height=h;if(w!==null)o.weight=w;o.sex=oneOf(p.sex,['m','f'],'m');o.act=oneOf(+p.act,[1.2,1.375,1.55,1.725],1.55);o.goal=oneOf(p.goal,['fat','muscle','recomp','strength','maintain','fit'],'fit');c.profile=o}
  if(typeof j.name==='string')c.name=j.name.slice(0,24);

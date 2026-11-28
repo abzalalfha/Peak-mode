@@ -52,3 +52,16 @@ dialog{border-radius:28px}
 
 .lim,.warnline{display:block;grid-column:1/-1;width:100%;margin:6px 0 0;color:var(--warn);font-size:12px;font-weight:600}.warnline{margin:4px 0}#rampList li.now{font-weight:700;color:var(--green)}
 .plogo{display:block;max-width:100%}.plogo .pm{fill:var(--green)}.plogo .pw{fill:var(--text)}.brandlogo{margin:0 0 12px}.oblogo{margin-bottom:18px}
+
+.learn small{letter-spacing:.06em}.learn b{display:block;margin:6px 0 4px;font-size:16px}.lrow2{display:flex;gap:14px;align-items:center;margin-top:8px}
+.qopts{display:grid;gap:8px;margin-top:10px}.qopts button{text-align:left;padding:12px 14px;border-radius:14px;border:1px solid color-mix(in srgb,var(--text) 16%,transparent);background:color-mix(in srgb,var(--text) 7%,transparent);color:var(--text);font:inherit}
+.qopts button.ok{background:color-mix(in srgb,var(--green) 30%,transparent);border-color:var(--green)}.qopts button.bad{border-color:var(--warn);color:var(--warn)}
+.rlearn{margin-top:18px;text-align:left}.rl{padding:14px;border-radius:18px;background:color-mix(in srgb,var(--text) 7%,transparent)}.rl small{letter-spacing:.06em;opacity:.8}.rl>b{display:block;margin:4px 0 8px;font-size:17px}
+.ltabs{display:flex;gap:6px;margin:8px 0 10px}.ltabs button{flex:1;padding:8px 6px;border-radius:12px;border:1px solid color-mix(in srgb,var(--text) 16%,transparent);background:none;color:var(--text);font:inherit}.ltabs button.on,.lm.on{background:var(--green);color:#101012;border-color:var(--green)}
+.lh{margin:8px 0 4px;font-size:12px;opacity:.7;text-transform:uppercase;letter-spacing:.05em}.lchips{display:flex;flex-wrap:wrap;gap:6px}.lm{padding:7px 11px;border-radius:99px;border:1px solid color-mix(in srgb,var(--text) 22%,transparent);background:none;color:var(--text);font:inherit;font-size:13px}.lm.p{border-color:var(--green)}
+.ldet{margin-top:10px;padding:10px 12px;border-radius:14px;background:color-mix(in srgb,var(--text) 6%,transparent)}.ldet b{display:inline}.ldet small{display:block;opacity:.75;margin:2px 0 6px}.ldet p,.lmu p,.rl p{margin:6px 0;font-size:14px;line-height:1.45}
+#mguide{position:fixed;inset:0;z-index:340;background:var(--bg);color:var(--text);overflow:auto;padding:calc(14px + env(safe-area-inset-top,0px)) 18px calc(24px + env(safe-area-inset-bottom,0px))}#mguide[hidden]{display:none}.mgtop{display:flex;align-items:center;gap:14px;margin-bottom:10px}.mgtop button{width:40px;height:40px;border-radius:14px;border:0;background:color-mix(in srgb,var(--text) 10%,transparent);color:var(--text);font-size:18px}
+#mgSearch{width:100%;margin:6px 0 12px;padding:12px 14px;border-radius:14px;border:1px solid color-mix(in srgb,var(--text) 18%,transparent);background:color-mix(in srgb,var(--text) 6%,transparent);color:var(--text);font:inherit;box-sizing:border-box}
+#mgList h3{margin:16px 0 6px}.lmu{border-bottom:1px solid color-mix(in srgb,var(--text) 12%,transparent);padding:10px 0}.lmu summary{cursor:pointer;list-style:none}.lmu summary small{display:block;opacity:.7;margin-top:2px}
+#ses .rclock{font-size:68px;margin:6px 0 2px;line-height:1.05}#ses .rbtns{margin-top:6px}#ses .rbtns button{min-height:50px;padding-top:10px;padding-bottom:10px}#ses .rlearn{margin-top:12px}
+#ses .rbtns button{height:52px;min-height:52px;padding:0 12px;align-self:center}

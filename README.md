@@ -121,3 +121,12 @@ After uploading v2 to GitHub, close and reopen the app once or twice so the new 
 - New files: `logo.js` (logo shapes used by the app), `logo.svg` and `logo-mark.svg` (standalone brand files), `icon-192.png`, `icon-512.png`, `icon-maskable-512.png`, `apple-touch-icon.png`. `icon.svg` was replaced.
 - On Android, remove and re-add the app to the Home Screen to see the new icon. iPhone also needs a re-add.
 - Shared run image: the date text is now aligned with the logo.
+
+## v13.4 — Learn: knowledge while you train
+- **Rest-time knowledge.** After each set, under the rest timer, a card shows what you just trained: main and helping muscles with everyday and scientific names, what each muscle does and why it matters, benefits, a key form cue, the common mistake, and a warning if the exercise may load an area you marked in Profile → Health. Tap a muscle for details. Works for all gym, home and outdoor exercises in the app; stretches say "stretched"; movements without a target muscle show a knowledge tip instead.
+- **Today's knowledge.** A tip at the top of Today (training, nutrition, recovery, running, safety, mindset), with an "Another tip" button. 60 tips.
+- **Daily question.** One multiple-choice question a day, with an explanation after you answer and a streak. Missing days only halves the streak. 86 questions that never repeat within a full cycle. The same question order cannot be guessed from the one before because each person has their own starting point.
+- **Muscle guide.** 26 muscles with common name, scientific name, location, function, benefit and training tip, searchable by muscle or exercise. Open it from the Today tip card or the rest card.
+- **Settings.** Daily knowledge tip and daily quiz can each be switched off. Backups now include quiz progress and these switches.
+- Content is general education, not medical advice. Have a qualified trainer and a dietitian review it before real members use it. Quiz and tip lists are append-only: add new items at the end, never reorder or delete.
+- New files: `learn-data.js` (content), `learn.js` (screens). Cache `peak-mode-v13-4`.

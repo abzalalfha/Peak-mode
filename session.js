@@ -36,7 +36,7 @@ E('#sBody').innerHTML=`<div id="sDemo" class="sdemo"></div><h1>${esc(e.n)}</h1><
 /* Rest uses the real clock (an end time), so a locked or throttled screen cannot make it run slow. */
 function rest(next,endAt){clearInterval(rt);X.restEnd=endAt||Date.now()+90000;X.restNext=next;persist();
 const left=()=>Math.max(0,Math.ceil((X.restEnd-Date.now())/1000));
-E('#sBody').innerHTML=`<p class="sset">Rest</p><div class="rclock" id="rc">${fmt(left())}</div><p class="hint">${esc(next)}</p><div class="rbtns"><button class="secondary" id="r15">+15 s</button><button class="primary" id="rSkip">Skip rest</button></div>`;
+E('#sBody').innerHTML=`<p class="sset">Rest</p><div class="rclock" id="rc">${fmt(left())}</div><p class="hint">${esc(next)}</p><div class="rbtns"><button class="secondary" id="r15">+15 s</button><button class="primary" id="rSkip">Skip rest</button></div><div id="rLearn" class="rlearn"></div>`;window.PMlearn&&PMlearn.mountRest(E('#rLearn'),X.ex[X.i].n);
 const go=()=>{clearInterval(rt);advance()};
 const tick=()=>{if(!E('#rc'))return clearInterval(rt);const l=left();E('#rc').textContent=fmt(l);if(l<=0){beep();navigator.vibrate&&navigator.vibrate([200,100,200]);go()}};
 rt=setInterval(tick,250);E('#r15').onclick=()=>{X.restEnd+=15000;persist();tick()};E('#rSkip').onclick=go}
