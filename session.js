@@ -1,6 +1,6 @@
 /* PEAK MODE v13.2: guided workout session. Saved as you go (survives reloads), clock-based rest timer, honest completion. */
 (()=>{
-const E=s=>document.querySelector(s),SKEY='peakModeSession';
+const E=s=>document.querySelector(s),SKEY=ns('peakModeSession');
 document.body.insertAdjacentHTML('beforeend','<div id="ses" role="dialog" aria-modal="true" aria-label="Workout session" hidden><div class="sin"><div class="stop"><button id="sX" aria-label="End session">✕</button><b id="sPos"></b><b id="sClock">0:00</b></div><div id="sBody"></div></div></div>');
 const parse=s=>{const m=/^(\d+)(?:\s*[–-]\s*(\d+))?\s*×\s*(.+)$/.exec(String(s).trim());if(!m)return{sets:1,txt:String(s),r:'',timed:true};const n=/(\d+)(?!.*\d)/.exec(m[3]);return{sets:+(m[2]||m[1]),txt:m[3],r:n?+n[1]:'',timed:/\bs\b|sec|min/i.test(m[3])}};
 let X=null,tm=0,rt=0,demo=0,lock=null,ac=null;

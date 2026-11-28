@@ -1,7 +1,7 @@
 /* PEAK MODE v13.1: safe backup and restore. Every imported value is checked before anything on the device is changed. */
 (()=>{
 const E=s=>document.querySelector(s);
-const BACKUP_FORMAT='peak-mode-backup',APP_VERSION='13.4',MAX_BYTES=120*1024*1024;
+const BACKUP_FORMAT='peak-mode-backup',APP_VERSION=APP_VER,MAX_BYTES=120*1024*1024;
 const isObj=x=>!!x&&typeof x==='object'&&!Array.isArray(x);
 const DATE=/^\d{4}-\d{2}-\d{2}$/,IMG=/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+\/=]+$/,ID=/^[A-Za-z0-9_-]{1,80}$/,TIME=/^\d{2}:\d{2}$/;
 const num=(x,min,max)=>{if(x===''||x===null||typeof x==='boolean'||Array.isArray(x))return null;const n=Number(x);return Number.isFinite(n)&&n>=min&&n<=max?n:null};
@@ -70,9 +70,9 @@ E('#import').onchange=async e=>{
  const s=r.summary,msg=`Restore this backup?\n\n${s.measurements} body check-ins, ${s.lifts} lift records, ${s.days} days of meals, ${s.photos} photos, ${s.runs} activities.${r.skipped?`\n${r.skipped} photo/activity item(s) were unreadable and will be skipped.`:''}\n\nYour settings and logs on this device will be REPLACED by the backup. Photos and activities in the backup are added; ones already on this device stay.`;
  if(!confirm(msg))return showToast('Restore cancelled. Nothing was changed.');
  try{
-  localStorage.setItem('peakModeLifetimeV1_beforeRestore',localStorage.getItem('peakModeLifetimeV1')||'');
+  localStorage.setItem(key+'_beforeRestore',localStorage.getItem(key)||'');
   for(const p of r.photos)await PM.putP(p);
-  Object.keys(db).forEach(k=>delete db[k]);Object.assign(db,r.data);save();
+  Object.keys(db).forEach(k=>delete db[k]);Object.assign(db,r.data);PMSTORE.migrate(db);save();
   showToast('Backup restored.');setTimeout(()=>location.reload(),700)
  }catch(err){showToast('Restore failed part-way. Your previous settings are kept in a safety copy. Please contact support before importing again.')}
 };

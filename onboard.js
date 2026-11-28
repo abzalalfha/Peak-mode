@@ -28,6 +28,6 @@ E('#obSkip').onclick=()=>{st++;draw()};
 E('#obBack').onclick=()=>{if(edit&&st===1){E('#ob').hidden=true;document.body.style.overflow='';return}if(st>0){STEPS[st].t&&0;st--;draw()}};
 E('#obBody').addEventListener('click',e=>{const b=e.target.closest('.opt');if(!b)return;const g=b.closest('[data-grp]');if(g.dataset.multi){b.classList.toggle('on');b.dataset.t=Date.now()}else{g.querySelectorAll('.opt').forEach(x=>x.classList.remove('on'));b.classList.add('on')}if(g.dataset.grp==='where')eqVis()});
 E('#editProfile').onclick=()=>{E('#close').click();openOB(true)};
-const _rt=renderToday;renderToday=function(){_rt();const l=(db.prefs||{}).limits,c=E('#coachToday');if(l&&c)c.insertAdjacentHTML('beforeend',`<p class="hint">Your noted limits: ${esc(l)}. Modify or skip anything that hurts.</p>`)};
+PMR.on('today',()=>{const l=(db.prefs||{}).limits,c=E('#coachToday');if(l&&c)c.insertAdjacentHTML('beforeend',`<p class="hint">Your noted limits: ${esc(l)}. Modify or skip anything that hurts.</p>`)});
 if(!db.onboarded)openOB(false);else renderToday();
 })();

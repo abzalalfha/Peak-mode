@@ -40,5 +40,5 @@ if(id==='pSave'){const q={age:v('#pAge'),height:v('#pH'),weight:v('#pW')};if(!(q
 if(id==='tApply'){const t=targets();if(confirm(`Set targets to ${t.kcal} kcal and ${t.protein} g protein?`)){db.targets.kcal=t.kcal;db.targets.protein=t.protein;save();renderToday();render()}}
 if(id==='adjBtn'||e.target.dataset.adj){const d=+e.target.dataset.adj;if(confirm(`Change calorie target from ${db.targets.kcal} to ${db.targets.kcal+d}?`)){db.targets.kcal+=d;save();renderToday();render()}}
 if(id==='cSave'){const s=v('#cSleep');if(!(s>=0&&s<=16&&E('#cSleep').value!==''))return tn('Enter hours slept (0–16).');CI()[today()]={sleep:s,q:v('#cQ'),sore:v('#cSore'),fat:v('#cFat'),stress:v('#cStress'),mot:v('#cMot'),pain:E('#cPain').checked};save();render();tn('Check-in saved.')}});
-window.PMT=targets;const _rt=renderToday;renderToday=function(){_rt();render()};renderToday();
+window.PMT=targets;PMR.on('today',render);renderToday();
 })();

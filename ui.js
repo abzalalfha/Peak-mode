@@ -16,5 +16,5 @@ new MutationObserver(mark).observe(E('nav'),{subtree:true,attributes:true,attrib
 E('#tName').closest('label').insertAdjacentHTML('afterend','<label>Program start date<input id="tStart" type="date"></label>');
 E('#settings').addEventListener('click',()=>{E('#tName').value=db.name||'';E('#tStart').value=db.startDate||db.firstUse||today()});
 E('#tStart').onchange=e=>{const v=e.target.value;if(/^\d{4}-\d{2}-\d{2}$/.test(v)&&v<=today()){db.startDate=v;save();renderToday();showToast('Start date saved.')}else{showToast('Pick a date that is not in the future.');e.target.value=db.startDate||db.firstUse||today()}};E('#tName').onchange=e=>{db.name=e.target.value.trim().slice(0,24);save();greet()};
-const _rt=renderToday;renderToday=function(){_rt();greet();strip();bars()};renderToday();mark();
+PMR.on('today',()=>{greet();strip();bars()});renderToday();mark();
 })();

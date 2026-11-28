@@ -1,0 +1,8 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PEAK MODE self-test</title>
+<style>body{font:15px/1.5 system-ui,sans-serif;margin:0;padding:16px;background:#101012;color:#f2f2ee;max-width:760px}h1{margin:0 0 4px}h2{margin:18px 0 6px;font-size:16px;color:#d8f56a}button{font:inherit;padding:10px 16px;border-radius:12px;border:0;background:#d8f56a;color:#101012;margin-right:8px}.ok{color:#bde87a}.bad{color:#ff8a65;font-weight:600}#sum{font-size:18px;margin:12px 0}p{color:#aaa}iframe{position:absolute;left:-9999px;width:390px;height:844px;border:0}</style></head>
+<body><h1>PEAK MODE self-test</h1>
+<p>Runs the app's own checks inside a separate, empty test store. <b>Your real data is never touched.</b> Takes about half a minute.</p>
+<button id="run">Run all tests</button><button id="copy" disabled>Copy results</button>
+<div id="sum">Ready.</div><div id="out"></div><iframe id="app" title="test app"></iframe>
+<script src="tests.js"></script></body></html>

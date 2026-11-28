@@ -130,3 +130,10 @@ After uploading v2 to GitHub, close and reopen the app once or twice so the new 
 - **Settings.** Daily knowledge tip and daily quiz can each be switched off. Backups now include quiz progress and these switches.
 - Content is general education, not medical advice. Have a qualified trainer and a dietitian review it before real members use it. Quiz and tip lists are append-only: add new items at the end, never reorder or delete.
 - New files: `learn-data.js` (content), `learn.js` (screens). Cache `peak-mode-v13-4`.
+
+## v13.5 — Solid foundations (end of Phase 1)
+- **Safer saving.** Saved data now has a version number and automatic upgrade steps. Damaged data no longer crashes the app (a copy is kept and the app starts clean). A full or blocked device store is reported instead of failing silently. Data saved by a newer version of the app is never overwritten by an older one.
+- **One screen-drawing pipeline.** Ten functions that were layered on top of each other were replaced by a single list of drawing steps (see `ARCHITECTURE.md`). Two old, unused generations of backup code were removed.
+- **Support tools.** Settings now shows the app version and has "Copy diagnostics for support". The report contains no personal data (no name, meals, photos or measurements). The last 20 problems are logged on the device.
+- **Self-test page.** Open `tests.html` and press "Run all tests". 51 checks run against a throw-away test store; your real data is never touched.
+- New files: `diag.js`, `tests.html`, `tests.js`, `ARCHITECTURE.md`. Cache `peak-mode-v13-5`.
